@@ -1,17 +1,28 @@
 import cv2
-facecascade = cv2.CascadeClassifier("Resources/haarcascade_frontalface_default.xml")
-#img = cv2.imread("Resources/friends.jpg")
-cap = cv2.VideoCapture(0)
-width=640
-height=480
-cap.set(3,width)
-cap.set(4,height)
-#imgGray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+import numpy as np
+
+circles = np.zeros((4,2),np.int)
+
+counter=0
+def findpointer(event,x,y,flags,param):
+    global counter
+    if event == cv2.EVENT_LBUTTONDOWN:
+        circles[counter]=x,y
+        counter=counter+1
+        #print(x,y)
+
+img = cv2.imread("Resources/card.jpg")
 while True:
-    success, img = cap.read()
-    faces = facecascade.detectMultiScale(img, 1.1, 5)
-    for(x,y,w,h) in faces:
-        cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
+    if counter==4:
+        height=350
+        width=250
+        pst1 = np.float32([circles[0],circles[1],circles[2],circles[3]])
+        pst2 =np.float32([[0,0],[width,0],[0,height],[width,height]])
+        matrix = cv2.getPerspectiveTransform(pst1,pst2)
+        warpimg = cv2.warpPerspective(img,matrix,(width,height))
+        cv2.imshow("Output Warp",warpimg)
+    for i in range(0,4):
+        cv2.circle(img,circles[i],2,(0,0,255),cv2.FILLED)
     cv2.imshow("Output",img)
-    if cv2.waitKey(1) & 0xFF==ord('q'):
-        break
+    cv2.setMouseCallback("Output",findpointer)
+    cv2.waitKey(1)
