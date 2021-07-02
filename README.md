@@ -10,6 +10,7 @@
 <br>Chapter 7 - Color Detection
 <br>Chapter 8 - Contour and Shape Detection
 <br>Chapter 9 - Face Detection
+<br>Chapter 10 - Mouse Tracking
 <br> Using the above chapters projects are created................
 <br>Project 1 - Virtual Paint
 <br>Project 2 - Doc Scanner
